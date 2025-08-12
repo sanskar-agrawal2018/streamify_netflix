@@ -1,0 +1,7 @@
+{
+    "terminal.integrated.env.linux": {
+        "SPARK_HOME":"",
+        // "JAVA_HOME":"/usr/lib/jvm/java-17-openjdk-amd64",
+        // "NEW_VARIABLE":"new_value"
+    },
+}
