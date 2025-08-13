@@ -15,4 +15,11 @@ class DataTransforms:
         Returns
             any: Transformed data.
         """
-        return raw_df.withColumn("name", F.upper(F.col("name")))
+        raw_df = raw_df.withColumn("eventTime", F.to_timestamp(raw_df["eventTime"]))
+        raw_df = raw_df.withColumn("data",F.explode(raw_df["data.devices"]))
+        raw_df = raw_df.withColumn("deviceId", F.col("data.deviceId"))
+        raw_df = raw_df.withColumn("measure", F.col("data.measure"))
+        raw_df = raw_df.withColumn("status", F.col("data.status"))
+        raw_df = raw_df.withColumn("temperature", F.col("data.temperature"))
+        raw_df = raw_df.drop("data", "devices")  # Drop the original '
+        return raw_df

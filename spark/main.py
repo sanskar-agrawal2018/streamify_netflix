@@ -47,7 +47,11 @@ if __name__ == "__main__":
     print(f"Reading from path: {path}")
     df_stream=ReadHelper.read_stream(spark, path, schema)
 
-    WriteHelper.write_stream(df_stream, "console", None, None)
+
+    transformed_df = DataTransforms.transform_data(spark, df_stream)
+    transformed_df.printSchema()
+
+    WriteHelper.write_stream(transformed_df, "console", None, None)
     if(os.getenv("ENV") == "local"):
         input("Press Enter to exit...")  # Wait for user input before exiting
         spark.stop()
