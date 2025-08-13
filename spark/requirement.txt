@@ -1,0 +1,10 @@
+delta-spark        == 4.0.0
+importlib_metadata == 8.7.0
+load-dotenv        == 0.1.0
+optional           == 0.0.1
+pip                == 25.2
+py4j               0.10.9.9
+pyspark            4.0.0
+python-dotenv      1.1.1
+setuptools         65.5.0
+zipp               3.23.0

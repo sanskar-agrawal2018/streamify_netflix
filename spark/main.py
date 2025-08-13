@@ -4,6 +4,9 @@ import pyspark
 from delta import configure_spark_with_delta_pip
 # import delta
 from dotenv import load_dotenv
+from transformations.data_transforms import DataTransforms
+from utils.write_healper import WriteHelper
+from utils.read_healper import ReadHelper
 
 load_dotenv(override=True)  # Load environment variables from .env file
 
@@ -13,6 +16,8 @@ def create_spark_session():
     Create a Spark session with the necessary configurations.
     """
     print(pyspark.__version__)
+    
+
     
     os.environ.pop("SPARK_HOME", None)  # Ensure SPARK_HOME is not set
     builder = pyspark.sql.SparkSession.builder.appName("MyApp") \
@@ -25,32 +30,24 @@ def create_spark_session():
     return spark
 
 
-def transformation(spark):
-    """
-    Perform a sample transformation using Delta Lake.
-    """
-    
-    # Create a sample DataFrame
-    data = [("Alice", 1), ("Bob", 2), ("Cathy", 3)]
-    df = spark.createDataFrame(data, ["name", "id"])
-    
-    # Write the DataFrame to a Delta table
-    df.write.format("delta").mode("overwrite").save("/tmp/delta-table")
-    
-    # Read from the Delta table
-    df2 = spark.read.format("delta").load("/tmp/delta-table")
-    
-    # Show the contents of the Delta table
-    df2.show()
+
 
 if __name__ == "__main__":
     print(pyspark.__version__)
     print(sys.executable)
     spark = create_spark_session()
     
+    df=spark.read.json(os.path.join(os.getcwd(), "tests","data","device_data"))
+    print(df.printSchema())
+    schema=df.schema
 
-    transformation(spark)
     
+
+    path=os.path.join(os.getcwd(), "tests","data","device_data")
+    print(f"Reading from path: {path}")
+    df_stream=ReadHelper.read_stream(spark, path, schema)
+
+    WriteHelper.write_stream(df_stream, "console", None, None)
     if(os.getenv("ENV") == "local"):
         input("Press Enter to exit...")  # Wait for user input before exiting
         spark.stop()
