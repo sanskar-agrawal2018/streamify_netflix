@@ -46,3 +46,23 @@ class ReadHelper:
         WriteHelper.write_stream(df_null, "console", None, None)  # Write null values to console for debugging
         df_not_null = df.filter(~(df["eventId"].isNull() | df["eventOffset"].isNull() | df["eventPublisher"].isNull() | df["customerId"].isNull() | df["data"].isNull()))
         return df_not_null
+    
+
+
+    def read_kafka(spark: SparkSession,server: str, topic: str) -> DataFrame:
+        """
+        Read data from a Kafka topic.
+        
+        Args:
+            server (str): The Kafka server address.
+        
+        Returns:
+            DataFrame: The DataFrame containing the data read from Kafka.
+        """
+        df= spark.readStream.format("kafka")\
+            .option("kafka.bootstrap.servers", server)\
+            .option("subscribe", topic)\
+            .option("startingOffsets", "earliest")\
+            .load()
+        # df.show()
+        return df

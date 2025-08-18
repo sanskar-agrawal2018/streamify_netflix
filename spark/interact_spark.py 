@@ -1,0 +1,11 @@
+import subprocess
+
+pid = "12345"  # JVM PID
+
+# Example: Get heap info
+output = subprocess.check_output(["jcmd", pid, "GC.heap_info"])
+print(output.decode())
+
+# Example: Get system properties
+output = subprocess.check_output(["jcmd", pid, "VM.system_properties"])
+print(output.decode())

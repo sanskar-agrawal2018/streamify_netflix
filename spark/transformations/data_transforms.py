@@ -22,4 +22,6 @@ class DataTransforms:
         raw_df = raw_df.withColumn("status", F.col("data.status"))
         raw_df = raw_df.withColumn("temperature", F.col("data.temperature"))
         raw_df = raw_df.drop("data", "devices")  # Drop the original '
+        # raw_df = raw_df.withColumn('S_no',F.monotonically_increasing_id())  # Add a unique identifier
+        # raw_df = raw_df.selectExpr( "S_no", "eventId", "eventOffset", "eventPublisher", "customerId", "deviceId", "measure", "status", "temperature", "eventTime")
         return raw_df

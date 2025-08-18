@@ -2,3 +2,6 @@
 .vscode/
 .env/
 device_01.json
+checkpoint_dir/
+tests/data/device_data/
+data/
